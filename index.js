@@ -35,6 +35,7 @@ async function run() {
     // ==============================================================
     const database = client.db('soloMatrixDB');
     const jobsCollection = database.collection('jobs');
+    const bidsCollection = database.collection('bids');
     // =============== JOBS COLLECTION    ================
     app.get('/jobs', async (req, res) => {
       const result = await jobsCollection.find().toArray();
@@ -44,6 +45,13 @@ async function run() {
     app.get('/jobs/:id', async (req, res) => {
       const query = { _id: new ObjectId(req.params.id) };
       const result = await jobsCollection.findOne(query);
+      res.send(result);
+    });
+
+    // =============== BIDS COLLECTION    ================
+    app.post('/bids', async (req, res) => {
+      const doc = req.body;
+      const result = await bidsCollection.insertOne(doc);
       res.send(result);
     });
   } catch (error) {
